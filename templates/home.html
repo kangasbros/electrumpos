@@ -1,1 +1,8 @@
+{% load i18n %}
 html stuff here!
+
+<form id="merchantform" action="" method="POST">{% csrf_token %}
+    {{ merchant_form }}
+    <button type="submit" name="submit" class="btn btn-danger">{% trans "Start accepting payments!" %}</button>
+</form>
+

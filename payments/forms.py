@@ -5,6 +5,7 @@ from django.forms import HiddenInput, RadioSelect, ModelForm, Textarea, Select, 
 from django.utils.translation import ugettext_lazy as _
 from payments import models
 from decimal import Decimal
+from models import Merchant
 
 import os
 
@@ -13,7 +14,7 @@ from django_bitcoin.BCAddressField import b58encode
 class MerchantForm(forms.ModelForm):
  
     class Meta:
-        model = models.UserProfile
+        model = Merchant
         fields = ("master_public_key","currency")
 
     def save(self):
@@ -21,4 +22,4 @@ class MerchantForm(forms.ModelForm):
         if not merchant.id:
             merchant.uuid = b58encode(os.urandom(16))
         return merchant
-    
+
