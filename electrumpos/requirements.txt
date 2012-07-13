@@ -1,0 +1,4 @@
+django
+mysql-python
+git+git://github.com/kangasbros/django-bitcoin.git
+django-extensions

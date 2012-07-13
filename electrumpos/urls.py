@@ -6,7 +6,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'electrumpos.views.home', name='home'),
+    url(r'^$', 'electrumpos.payments.home', name='home'),
     # url(r'^electrumpos/', include('electrumpos.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
