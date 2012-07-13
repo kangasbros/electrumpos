@@ -14,9 +14,10 @@ from django.core.mail import send_mail
 
 
 def home(request):
+    #merchant_form = MerchantForm()
 
     return render_to_response("home.html", {
-        "dummy": "dummy variable"
+        "dummy": "dummy variable",
         }, context_instance=RequestContext(request))
 
 

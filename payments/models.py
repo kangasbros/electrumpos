@@ -25,3 +25,5 @@ class Payments(models.Model):
     btc_amount = models.DecimalField(max_digits=16, decimal_places=8)
 
     currency_amount = models.DecimalField(max_digits=16, decimal_places=2)
+
+    merchant = models.ForeignKey(Merchant)
