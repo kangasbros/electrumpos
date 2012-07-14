@@ -1,4 +1,8 @@
+{% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap_toolkit %}
+{% block content %}
+    
 {% if messages %}
 <div class="row">
   <div class="span8">
@@ -18,8 +22,40 @@
 </div>
 {% endif %}
 
-<form id="merchantform" action="" method="POST">{% csrf_token %}
-    {{ merchant_form }}
-    <button type="submit" name="submit" class="btn btn-danger">{% trans "Start accepting payments!" %}</button>
-</form>
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Electrum Merchant</h1>
+        <p>Electrum merchant is the safest way to accept bitcoin payments. In the whole Universe.</p>
+        <p> Your money (private seed) can be stored offline or on ultra-secure separate computer. Your</p>
+      </div>
+
+      <div class="row">
+        <div class="span12">
+            <h2>Start accepting payments now!</h2>
+            <form id="merchantform" class="well" action="" method="POST">{% csrf_token %}
+                {{ merchant_form|as_bootstrap }}
+                <button type="submit" name="submit" class="btn btn-danger">{% trans "Start!" %}</button>
+            </form>
+        </div>
+      </div>
+
+            <!-- Example row of columns -->
+      <div class="row">
+        <div class="span4">
+          <h2>Step 1</h2>
+           <p><a href="http://ecdsa.org/electrum/">Install Electrum</a>, and generate a new wallet. You can store your wallet in your head (brainwallet), offline printed out in a safe, or on ultra-secure separate computer.</p>
+        </div>
+        <div class="span4">
+          <h2>Step 2</h2>
+           <p>Export your <b>master public key</b> from Electrum. Currently this can be done useing command line:</p>
+          <p><code>python electrum eval "wallet.master_public_key.encode('hex')"</code></p>
+       </div>
+        <div class="span4">
+          <h2>Step 3</h2>
+          <p>Put your master key above, and select your preferred currency. Unique URL is generated you. You can share this URL with your employees, friends and family, and they can also accept payments for you. It also works great on mobile devices.</p>
+        </div>
+      </div>
+
+
+{% endblock content %}
 

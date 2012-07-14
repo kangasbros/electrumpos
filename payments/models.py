@@ -9,7 +9,15 @@ import urllib
 BITCOIN_CONFIRMATIONS_REQUIRED = getattr(
     settings, 
     "BITCOIN_CONFIRMATIONS_REQUIRED", 
-    1)
+    0)
+
+
+def bitcoin_address_received(bitcoin_address, confirmations=BITCOIN_CONFIRMATIONS_REQUIRED):
+    url = "http://blockchain.info/q/addressbalance/" + bitcoin_address + "?confirmations=" + str(confirmations)
+    f = urllib.urlopen(url, None)
+    data = f.read()
+    r = Decimal(data) * Decimal("0.00000001")
+    return r
 
 
 class Merchant(models.Model):
@@ -43,14 +51,18 @@ class Payment(models.Model):
         return "bitcoin:"+self.bitcoin_address+"&amount="+str(self.btc_amount)
     
     def received(self):
-        url = "http://blockchain.info/q/addressbalance/" + self.bitcoin_address + "?confirmations=" + str(BITCOIN_CONFIRMATIONS_REQUIRED)
-        f = urllib.urlopen(url, None)
-        data = f.read()
-        r = Decimal(data) * Decimal("0.00000001")
+        r = bitcoin_address_received(self.bitcoin_address)
         if r > self.received_least:
             self.received_least = r
             self.save()
         return r
+
+    def is_paid(self):
+        if self.received_least >= self.btc_amount:
+            return True
+        if self.received() >= self.btc_amount:
+            return True
+        return False
 
 
 

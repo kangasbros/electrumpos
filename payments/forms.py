@@ -14,6 +14,9 @@ import os
 from django_bitcoin.BCAddressField import b58encode
 
 class MerchantForm(forms.ModelForm):
+
+    master_public_key = forms.CharField(min_length=2,
+        widget=forms.TextInput(attrs={'class': 'span8', 'title': 'Your master public key', 'placeholder': 'Master public key'}))
  
     class Meta:
         model = Merchant

@@ -5,3 +5,4 @@ django-extensions
 jsonrpclib
 Pillow
 qrcode
+django-bootstrap-toolkit

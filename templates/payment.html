@@ -1,5 +1,9 @@
+{% extends "base.html" %}
 {% load i18n %}
 {% load currency_conversions %}
+{% load bootstrap_toolkit %}
+{% block content %}
+
 {% if fresh_payment and payment %}
     <h2>Payment #{{payment.id}}</h2>
     {{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount }} BTC<br/>
@@ -7,7 +11,7 @@
     {% bitcoin_payment_qr payment.bitcoin_address payment.btc_amount %}
 {% endif %}
 
-<h2>New payment</h2>
+<h2>New payment/address</h2>
 
 <form id="paymentform" action="" method="POST">{% csrf_token %}
     {{ payment_form }}
@@ -16,15 +20,19 @@
 
 {% if not fresh_payment and payment %}
     <h2>Payment #{{payment.id}}</h2>
+<center>
+    <div class="well">
     {{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount }} BTC<br/>
     Exchange rate: {{ payment.exchange_rate }} (24h avg)
     {% bitcoin_payment_qr payment.bitcoin_address payment.btc_amount %}
+</div>
+</center>
 {% endif %}
 
 
 <h2>Old payments</h2>
 
-<table>
+<table class="table table-striped">
 <tr>
     <th>Bitcoin address</th>
     <th>Requested amount</th>
@@ -33,7 +41,13 @@
 
 {% for p in previous_payments %}
 <tr>
-    <td>{{ p.bitcoin_address }}</td>
+    <td>{{ p.bitcoin_address }}
+{% if p.is_paid %}
+    <span class="label label-success">Paid</span>
+{% else %}
+    <span class="label label-warning">Unpaid</span>
+{% endif %}
+    </td>
     <td>{{ p.btc_amount }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
     <td>{{ p.received }}</td>
 </tr>
@@ -42,4 +56,6 @@
 
 <h2>How to access</h2>
 
-/django_bitcoin/qrcode/{{ }}"/>
+<p>You can</p>
+
+{% endblock content %}

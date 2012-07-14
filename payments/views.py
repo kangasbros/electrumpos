@@ -54,7 +54,10 @@ def payment(request, uuid):
         payment_form = PaymentForm(request.POST)
         if payment_form.is_valid():
             payment = payment_form.save(commit=False)
-            payment.bitcoin_address = electrum_wallet_server.getnewaddress(merchant.master_public_key)
+            while True:
+                payment.bitcoin_address = electrum_wallet_server.getnewaddress(merchant.master_public_key)
+                if bitcoin_address_received(payment.bitcoin_address, 0) == Decimal(0):
+                    break
             if not payment.bitcoin_address:
                 raise Exception("Couldn't fetch new address. Contact the site operators.")
             payment.merchant = merchant
