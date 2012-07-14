@@ -4,3 +4,4 @@ dist/
 django_ratings.egg-info/
 *.egg
 myenv*
+electrumpos/local_settings.py
