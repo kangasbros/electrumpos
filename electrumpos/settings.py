@@ -168,3 +168,12 @@ try:
 except ImportError:
     pass
 
+ELECTRUM_REMOTE_HOST = "localhost"
+ELECTRUM_REMOTE_PORT = 8444
+username = 'foo'
+password = 'bar'
+
+import jsonrpclib
+electrum_wallet_server = jsonrpclib.Server('http://%s:%s@%s:%d'%(username, password, ELECTRUM_REMOTE_HOST, ELECTRUM_REMOTE_PORT))
+
+
