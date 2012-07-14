@@ -21,7 +21,7 @@
 <h2>New payment/address</h2>
 
 <form id="paymentform" action="{{ merchant.url }}" method="POST">{% csrf_token %}
-    {{ payment_form }}
+    {{ payment_form }} {{ merchant.currency }}<br/>
     <button type="submit" name="submit" class="btn btn-danger">{% trans "New payment" %}</button>
 </form>
 
@@ -49,8 +49,20 @@
 {% endfor %}
 </table>
 
-<h2>How to access</h2>
+<div class="well">
 
-<p>You can</p>
+    <h4>Merchant information</h4>
+
+    <b>Master public key:</b> {{ merchant.master_public_key }}<br/>
+    <b>Payments URL:</b> {{ merchant.url }}<br/>
+
+</div>
+
+<h3>Tips</h3>
+
+<ul>
+<li>You can use the same URL with multiple devices, and also share it with your employees, friends and family.</li>
+<li>You can use the same URL with multiple devices, and also share it with your employees, friends and family.</li>
+</ul>
 
 {% endblock content %}

@@ -76,6 +76,7 @@ def payment(request, uuid, payment_id=None):
             payment.btc_amount = currency2btc(payment.currency_amount, merchant.currency).quantize(BITCOIN_CONVERSION_PRECISION)
             payment.save()
             fresh_payment = True
+            return HttpResponseRedirect(payment.url())
         else:
             messages.add_message(request, messages.ERROR, \
                         _("Error in form."))

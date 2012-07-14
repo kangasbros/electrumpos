@@ -77,7 +77,7 @@ class Payment(models.Model):
         return False
 
     def url(self):
-        return "/m/"+self.uuid+"/"+str(self.id)
+        return "/m/"+self.merchant.uuid+"/"+str(self.id)
 
 
 
