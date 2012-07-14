@@ -7,7 +7,10 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'payments.views.home', name='home'),
-    url(r'^w/(?P<uuid>.*?)$', 'payments.views.payment', name='payment'),
+    url(r'^m/(?P<uuid>.*?)$', 'payments.views.payment', name='payment'),
+
+    url(r'^django_bitcoin/', include('django_bitcoin.urls')),
+
     # url(r'^electrumpos/', include('electrumpos.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

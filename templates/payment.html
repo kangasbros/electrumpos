@@ -1,1 +1,45 @@
-html stuff here!
+{% load i18n %}
+{% load currency_conversions %}
+{% if fresh_payment and payment %}
+    <h2>Payment #{{payment.id}}</h2>
+    {{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount }} BTC<br/>
+    Exchange rate: {{ payment.exchange_rate }} (24h avg)
+    {% bitcoin_payment_qr payment.bitcoin_address payment.btc_amount %}
+{% endif %}
+
+<h2>New payment</h2>
+
+<form id="paymentform" action="" method="POST">{% csrf_token %}
+    {{ payment_form }}
+    <button type="submit" name="submit" class="btn btn-danger">{% trans "New payment" %}</button>
+</form>
+
+{% if not fresh_payment and payment %}
+    <h2>Payment #{{payment.id}}</h2>
+    {{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount }} BTC<br/>
+    Exchange rate: {{ payment.exchange_rate }} (24h avg)
+    {% bitcoin_payment_qr payment.bitcoin_address payment.btc_amount %}
+{% endif %}
+
+
+<h2>Old payments</h2>
+
+<table>
+<tr>
+    <th>Bitcoin address</th>
+    <th>Requested amount</th>
+    <th>Received</th>
+</tr>
+
+{% for p in previous_payments %}
+<tr>
+    <td>{{ p.bitcoin_address }}</td>
+    <td>{{ p.btc_amount }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
+    <td>{{ p.received }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h2>How to access</h2>
+
+/django_bitcoin/qrcode/{{ }}"/>

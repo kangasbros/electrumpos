@@ -90,6 +90,7 @@ SECRET_KEY = '%6tn=tz_3rrg@-9flzlvg@-lax(j)^^05)=o6wxy2r16l22mkl'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
+#    'django.template.loaders.app_directories.load_template_source',
 #     'django.template.loaders.eggs.Loader',
 )
 
@@ -127,6 +128,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'django_extensions',
+    'django_bitcoin',
     'payments',
 )
 

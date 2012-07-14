@@ -1,5 +1,22 @@
 {% load i18n %}
-html stuff here!
+{% if messages %}
+<div class="row">
+  <div class="span8">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+          <a class="close" href="#" data-dismiss="alert">&times;</a>
+          {% if message.tags == "error" %}
+            <h4 class="alert-heading">{% trans "Error!" %}</h4>
+          {% endif %}
+          {% if message.tags == "success" %}
+            <h4 class="alert-heading">{% trans "Success." %}</h4>
+          {% endif %}
+          {{ message }}
+      </div>
+      {% endfor %}
+  </div>
+</div>
+{% endif %}
 
 <form id="merchantform" action="" method="POST">{% csrf_token %}
     {{ merchant_form }}
