@@ -7,6 +7,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'payments.views.home', name='home'),
+    url(r'^m/(?P<uuid>.*?)/(?P<payment_id>[\d]+)$', 'payments.views.payment', name='payment_id'),
     url(r'^m/(?P<uuid>.*?)$', 'payments.views.payment', name='payment'),
 
     url(r'^django_bitcoin/', include('django_bitcoin.urls')),

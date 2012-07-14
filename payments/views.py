@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
 from django_bitcoin.currency import *
 from django_bitcoin.BCAddressField import b58encode
+from decimal import Decimal
 
 import django_bitcoin.templatetags
 
@@ -21,15 +22,26 @@ import django_bitcoin.views
 
 from electrumpos.settings import electrum_wallet_server
 
+BITCOIN_CONVERSION_PRECISION = getattr(
+    settings, 
+    "BITCOIN_CONVERSION_PRECISION", 
+    Decimal("0.0001"))
 
 def home(request):
     if request.method == "POST":
         merchant_form = MerchantForm(request.POST)
         if merchant_form.is_valid():
-            merchant = merchant_form.save()
-            merchant.uuid = b58encode(os.urandom(16))
-            merchant.save()
+            try:
+                merchant = Merchant.objects.get(master_public_key=merchant_form.cleaned_data["master_public_key"])
+            except Merchant.DoesNotExist:
+                merchant = merchant_form.save(commit=False)
+                merchant.master_public_key = merchant_form.cleaned_data["master_public_key"]
+                merchant.uuid = b58encode(os.urandom(16))
+                merchant.save()
             return HttpResponseRedirect("/m/"+merchant.uuid)
+        else:
+            messages.add_message(request, messages.ERROR, \
+                        _("Error in form."))
     else:
         merchant_form = MerchantForm()    
 
@@ -39,7 +51,7 @@ def home(request):
         }, context_instance=RequestContext(request))
 
 
-def payment(request, uuid):
+def payment(request, uuid, payment_id=None):
     try:
         merchant = Merchant.objects.get(uuid=uuid)
     except Merchant.DoesNotExist:
@@ -61,14 +73,20 @@ def payment(request, uuid):
             if not payment.bitcoin_address:
                 raise Exception("Couldn't fetch new address. Contact the site operators.")
             payment.merchant = merchant
-            payment.btc_amount = currency2btc(payment.currency_amount, merchant.currency)
+            payment.btc_amount = currency2btc(payment.currency_amount, merchant.currency).quantize(BITCOIN_CONVERSION_PRECISION)
             payment.save()
             fresh_payment = True
+        else:
+            messages.add_message(request, messages.ERROR, \
+                        _("Error in form."))
     else:
         payment_form = PaymentForm()
     
-    if not payment and merchant.payment_set.all().count()>0:
-        payment = merchant.payment_set.all().order_by("-created_at")[0] 
+    if payment_id:
+        try:
+            payment = Payment.objects.get(id=payment_id, merchant=merchant)
+        except Payment.DoesNotExist:
+            pass
 
     previous_payments = Payment.objects.filter(merchant=merchant, archived_at=None).order_by("-created_at")
 

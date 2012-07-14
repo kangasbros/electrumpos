@@ -4,31 +4,26 @@
 {% load bootstrap_toolkit %}
 {% block content %}
 
-{% if fresh_payment and payment %}
-    <h2>Payment #{{payment.id}}</h2>
-    {{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount }} BTC<br/>
-    Exchange rate: {{ payment.exchange_rate }} (24h avg)
-    {% bitcoin_payment_qr payment.bitcoin_address payment.btc_amount %}
-{% endif %}
+<h1>{{ merchant.business_name }}</h1>
 
-<h2>New payment/address</h2>
-
-<form id="paymentform" action="" method="POST">{% csrf_token %}
-    {{ payment_form }}
-    <button type="submit" name="submit" class="btn btn-danger">{% trans "New payment" %}</button>
-</form>
-
-{% if not fresh_payment and payment %}
+{% if payment %}
     <h2>Payment #{{payment.id}}</h2>
 <center>
-    <div class="well">
+<div class="well">
     {{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount }} BTC<br/>
-    Exchange rate: {{ payment.exchange_rate }} (24h avg)
-    {% bitcoin_payment_qr payment.bitcoin_address payment.btc_amount %}
+    Exchange rate: {{ payment.exchange_rate }} (24h avg)<br/>
+    {{ payment.bitcoin_address }}<br/>
+    <img src="/django_bitcoin/qrcode/{{ payment.payment_url }}"/>
 </div>
 </center>
 {% endif %}
 
+<h2>New payment/address</h2>
+
+<form id="paymentform" action="{{ merchant.url }}" method="POST">{% csrf_token %}
+    {{ payment_form }}
+    <button type="submit" name="submit" class="btn btn-danger">{% trans "New payment" %}</button>
+</form>
 
 <h2>Old payments</h2>
 
@@ -41,14 +36,14 @@
 
 {% for p in previous_payments %}
 <tr>
-    <td>{{ p.bitcoin_address }}
+    <td><a href="/m/{{ merchant.uuid }}/{{ p.id }}">{{ p.bitcoin_address }}</a>
 {% if p.is_paid %}
     <span class="label label-success">Paid</span>
 {% else %}
     <span class="label label-warning">Unpaid</span>
 {% endif %}
     </td>
-    <td>{{ p.btc_amount }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
+    <td>{{ p.btc_amount|btc2currency:"BTC" }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
     <td>{{ p.received }}</td>
 </tr>
 {% endfor %}

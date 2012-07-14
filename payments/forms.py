@@ -13,20 +13,15 @@ import os
 
 from django_bitcoin.BCAddressField import b58encode
 
+
 class MerchantForm(forms.ModelForm):
 
-    master_public_key = forms.CharField(min_length=2,
-        widget=forms.TextInput(attrs={'class': 'span8', 'title': 'Your master public key', 'placeholder': 'Master public key'}))
+    master_public_key = forms.CharField(min_length=50,
+        widget=forms.TextInput(attrs={'class': 'span8', 'placeholder': 'Your master public key'}))
  
     class Meta:
         model = Merchant
-        fields = ("master_public_key","currency")
-
-    def save(self):
-        merchant = super(MerchantForm, self).save()
-        if not merchant.id:
-            merchant.uuid = b58encode(os.urandom(16))
-        return merchant
+        fields = ("business_name", "currency",)
 
     def clean(self):
 
@@ -35,6 +30,7 @@ class MerchantForm(forms.ModelForm):
             raise ValidationError(_("Invalid public key."))
 
         return self.cleaned_data
+
 
 class PaymentForm(forms.ModelForm):
     

@@ -25,8 +25,12 @@ class Merchant(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     master_public_key = models.CharField(max_length=255, unique=True)
+    business_name = models.CharField(null=True, max_length=50)
     currency = models.CharField(max_length=5, choices=CURRENCY_CHOICES, default='USD')
     uuid = models.CharField(max_length=50)
+
+    def url(self):
+        return "/m/"+self.uuid
 
 
 class Payment(models.Model):
@@ -42,6 +46,14 @@ class Payment(models.Model):
     merchant = models.ForeignKey(Merchant)
 
     received_least = models.DecimalField(max_digits=16, decimal_places=8, default=Decimal(0))
+
+    def payment_url(self):
+        qr = "bitcoin:"+self.bitcoin_address+("", "?amount="+str(self.btc_amount))[self.btc_amount>0]
+        if self.merchant.business_name:
+            qr += "?label="+str(self.merchant.business_name)+" #"+str(self.id)
+        print qr
+        print urllib.quote(qr)
+        return urllib.quote(qr)
 
     def exchange_rate(self):
         return Decimal(self.currency_amount / self.btc_amount).quantize(Decimal("0.01"))
@@ -63,6 +75,9 @@ class Payment(models.Model):
         if self.received() >= self.btc_amount:
             return True
         return False
+
+    def url(self):
+        return "/m/"+self.uuid+"/"+str(self.id)
 
 
 
