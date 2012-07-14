@@ -43,8 +43,8 @@
     <span class="label label-warning">Unpaid</span>
 {% endif %}
     </td>
-    <td>{{ p.btc_amount|btc2currency:"BTC" }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
-    <td>{{ p.received }}</td>
+    <td>{{ p.btc_amount }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
+    <td>{{ p.received|btc2currency:"BTC" }}</td>
 </tr>
 {% endfor %}
 </table>
