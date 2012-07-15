@@ -4,6 +4,8 @@ from decimal import Decimal
 import datetime
 import urllib
 
+from electrumpos.settings import SITE_URL
+
 # Create your models here.
 
 BITCOIN_CONFIRMATIONS_REQUIRED = getattr(
@@ -32,6 +34,9 @@ class Merchant(models.Model):
     def url(self):
         return "/m/"+self.uuid
 
+    def full_url(self):
+        return SITE_URL+self.url()
+
 
 class Payment(models.Model):
     created_at = models.DateTimeField(default=datetime.datetime.now)
@@ -50,7 +55,7 @@ class Payment(models.Model):
     def payment_url(self):
         qr = "bitcoin:"+self.bitcoin_address+("", "?amount="+str(self.btc_amount))[self.btc_amount>0]
         if self.merchant.business_name:
-            qr += "?label="+str(self.merchant.business_name)+" #"+str(self.id)
+            qr += "&label="+str(self.merchant.business_name)+" #"+str(self.id)
         print qr
         print urllib.quote(qr)
         return urllib.quote(qr)
@@ -78,6 +83,7 @@ class Payment(models.Model):
 
     def url(self):
         return "/m/"+self.merchant.uuid+"/"+str(self.id)
+
 
 
 

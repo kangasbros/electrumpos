@@ -64,7 +64,9 @@
     <h4>Merchant information</h4>
 
     <b>Master public key:</b> {{ merchant.master_public_key|truncatechars:10 }}<br/>
-    <b>Payments URL:</b> {{ merchant.url }}<br/>
+    <b>Merchant URL:</b> {{ merchant.full_url }}<br/>
+    <b>Scan the following URL QR code on your mobile device. Bookmark it to accept payments with your phone:</b><br/>
+    <img src="/django_bitcoin/qrcode/{{ merchant.full_url }}"/>
 
 </div>
 
