@@ -47,10 +47,15 @@ function applyTx(tx, isConfirmed) {
         .text(Bitcoin.Util.formatValue(receivedValue))
         .attr('data-received', Bitcoin.Util.formatValue(receivedValue))
         .attr('data-received-confirmed', Bitcoin.Util.formatValue(receivedConfirmedValue));
+      var labelEl = domEl.find('.label');
+      var wellEl = $('.well');
+      var isWell = wellEl.find('.address').text() === addrStr;
       if (receivedConfirmedValue.compareTo(expectedValue) >= 0) {
-        domEl.find('.label').removeClass('label-success label-info label-warning label-important').addClass('label-success').text('Confirmed');
+        if (isWell) wellEl.animate({'background-color' : '#468847'});
+        labelEl.removeClass('label-success label-info label-warning label-important').addClass('label-success').text('Confirmed');
       } else if (receivedValue.compareTo(expectedValue) >= 0) {
-        domEl.find('.label').removeClass('label-success label-info label-warning label-important').addClass('label-info').text('Paid');
+        if (isWell) wellEl.animate({'background-color' : '#3A87AD'});
+        labelEl.removeClass('label-success label-info label-warning label-important').addClass('label-info').text('Paid');
       }
     }
   }
