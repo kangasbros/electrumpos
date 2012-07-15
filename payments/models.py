@@ -11,7 +11,7 @@ from electrumpos.settings import SITE_URL
 BITCOIN_CONFIRMATIONS_REQUIRED = getattr(
     settings, 
     "BITCOIN_CONFIRMATIONS_REQUIRED", 
-    0)
+    1)
 
 
 def bitcoin_address_received(bitcoin_address, confirmations=BITCOIN_CONFIRMATIONS_REQUIRED):
@@ -51,6 +51,7 @@ class Payment(models.Model):
     merchant = models.ForeignKey(Merchant)
 
     received_least = models.DecimalField(max_digits=16, decimal_places=8, default=Decimal(0))
+    received_least_confirmed = models.DecimalField(max_digits=16, decimal_places=8, default=Decimal(0))
 
     def payment_url(self):
         qr = "bitcoin:"+self.bitcoin_address+("", "?amount="+str(self.btc_amount))[self.btc_amount>0]
@@ -68,7 +69,14 @@ class Payment(models.Model):
         return "bitcoin:"+self.bitcoin_address+"&amount="+str(self.btc_amount)
     
     def received(self):
-        r = bitcoin_address_received(self.bitcoin_address)
+        r = bitcoin_address_received(self.bitcoin_address, confirmations=0)
+        if r > self.received_least:
+            self.received_least = r
+            self.save()
+        return r
+
+    def received_confirmed(self):
+        r = bitcoin_address_received(self.bitcoin_address, confirmations=BITCOIN_CONFIRMATIONS_REQUIRED)
         if r > self.received_least:
             self.received_least = r
             self.save()
@@ -78,6 +86,13 @@ class Payment(models.Model):
         if self.received_least >= self.btc_amount:
             return True
         if self.received() >= self.btc_amount:
+            return True
+        return False
+
+    def is_confirmed(self):
+        if self.received_least_confirmed >= self.btc_amount:
+            return True
+        if self.received_confirmed() >= self.btc_amount:
             return True
         return False
 

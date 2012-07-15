@@ -2,16 +2,12 @@
 {% load i18n %}
 {% load currency_conversions %}
 {% load bootstrap_toolkit %}
+{% load hash_filter %}
 {% block content %}
 
-<div class="row">
-  <div class="span8"><h1>{% if merchant.business_name %}{{ merchant.business_name }}{% else %}{{ merchant.business_name }}{% endif %}</h1>
-
-
-  </div>
-
-<div class="well" style="float: right;">1 BTC = {{ 1|btc2currency:merchant.currency }} {{ merchant.currency }}</div>
-</div>
+<div style="position:fixed; top:5px; right:5px;">1 BTC = {{ 1|btc2currency:merchant.currency }} {{ merchant.currency }}<br/>
+{% now "b d H:i" %}</div>
+<h1>{% if merchant.business_name %}{{ merchant.business_name }}{% else %}{{ merchant.business_name }}{% endif %}</h1>
 
 
 {% if payment %}
@@ -29,8 +25,8 @@
 <h2>New payment/address</h2>
 
 <form id="paymentform" action="{{ merchant.url }}" method="POST">{% csrf_token %}
-    {{ payment_form }} {{ merchant.currency }}<br/>
-    <button type="submit" name="submit" class="btn btn-danger">{% trans "New payment" %}</button>
+    {{ payment_form }} &nbsp;{{ merchant.currency }}
+    <button type="submit" name="submit" class="btn btn-danger">{% trans "Create!" %}</button>
 </form>
 
 <h2>Old payments</h2>
@@ -63,8 +59,8 @@
 
     <h4>Merchant information</h4>
 
-    <b>Master public key:</b> {{ merchant.master_public_key|truncatechars:10 }}<br/>
-    <b>Merchant URL:</b> {{ merchant.full_url }}<br/>
+    <b>Master public key hashed:</b> {{ merchant.master_public_key|hash:"sha256" }}<br/>
+    <b>Merchant URL:</b> <a href="{{ merchant.full_url }}">{{ merchant.full_url }}</a><br/>
     <b>Scan the following URL QR code on your mobile device. Bookmark it to accept payments with your phone:</b><br/>
     <img src="/django_bitcoin/qrcode/{{ merchant.full_url }}"/>
 

@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'django_bitcoin',
     'bootstrap_toolkit',
+    'django_hash_filter',
     'payments',
 )
 

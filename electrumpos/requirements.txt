@@ -6,3 +6,4 @@ jsonrpclib
 Pillow
 qrcode
 django-bootstrap-toolkit
+django-hash-filter

@@ -33,6 +33,8 @@ class MerchantForm(forms.ModelForm):
 
 
 class PaymentForm(forms.ModelForm):
+
+    currency_amount = forms.DecimalField(label="", widget=forms.TextInput(attrs={'class': 'input-small', 'placeholder': _("Amount")}), )
     
     class Meta:
         model = Payment
