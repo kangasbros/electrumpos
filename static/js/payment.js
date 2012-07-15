@@ -37,8 +37,10 @@ function applyTx(tx, isConfirmed) {
       var expected = domEl.find('.amount').attr('data-amount');
       var expectedValue = Bitcoin.Util.parseValue(expected);
       var txoutValue = Bitcoin.Util.valueToBigInt(txout.value);
-      receivedValue = receivedValue.add(txoutValue);
-      if (isConfirmed) {
+
+      if (!isConfirmed) {
+        receivedValue = receivedValue.add(txoutValue);
+      } else {
         receivedConfirmedValue = receivedConfirmedValue.add(txoutValue);
       }
       domEl.find('.received')
