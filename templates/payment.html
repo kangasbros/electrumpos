@@ -14,7 +14,7 @@
     <h2>Payment #{{payment.id}}</h2>
 <center>
 <div class="well">
-    {{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount }} BTC<br/>
+    {{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount|btc2currency:"BTC" }} BTC<br/>
     Exchange rate: {{ payment.exchange_rate }} (24h avg)<br/>
     {{ payment.bitcoin_address }}<br/>
     <img src="/django_bitcoin/qrcode/{{ payment.payment_url }}"/>
