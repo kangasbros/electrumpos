@@ -13,6 +13,8 @@ BITCOIN_CONFIRMATIONS_REQUIRED = getattr(
     "BITCOIN_CONFIRMATIONS_REQUIRED", 
     1)
 
+CURRENCY_CHOICES = [(x, x) for x in big_currency_list()]
+
 
 def bitcoin_address_received(bitcoin_address, confirmations=BITCOIN_CONFIRMATIONS_REQUIRED):
     url = "http://blockchain.info/q/addressbalance/" + bitcoin_address + "?confirmations=" + str(confirmations)
