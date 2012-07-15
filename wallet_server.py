@@ -156,9 +156,9 @@ if __name__ == '__main__':
 
     else:
 
-        nw = get_wallet_or_create(master_public_key_hex)
-        nw.synchronize()
-        print nw.get_balance()
+        # nw = get_wallet_or_create(master_public_key_hex)
+        # nw.synchronize()
+        # print nw.get_balance()
 
         wallet.set_path(wallet_path)
         wallet.read()
