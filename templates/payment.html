@@ -4,7 +4,15 @@
 {% load bootstrap_toolkit %}
 {% block content %}
 
-<h1>{{ merchant.business_name }}</h1>
+<div class="row">
+  <div class="span8"><h1>{% if merchant.business_name %}{{ merchant.business_name }}{% else %}{{ merchant.business_name }}{% endif %}</h1>
+
+
+  </div>
+
+<div class="well" style="float: right;">1 BTC = {{ 1|btc2currency:merchant.currency }} {{ merchant.currency }}</div>
+</div>
+
 
 {% if payment %}
     <h2>Payment #{{payment.id}}</h2>
@@ -29,6 +37,8 @@
 
 <table class="table table-striped">
 <tr>
+    <th>Status</th>
+    <th>Date</th>
     <th>Bitcoin address</th>
     <th>Requested amount</th>
     <th>Received</th>
@@ -36,13 +46,13 @@
 
 {% for p in previous_payments %}
 <tr>
-    <td><a href="/m/{{ merchant.uuid }}/{{ p.id }}">{{ p.bitcoin_address }}</a>
-{% if p.is_paid %}
+    <td>{% if p.is_paid %}
     <span class="label label-success">Paid</span>
 {% else %}
     <span class="label label-warning">Unpaid</span>
-{% endif %}
-    </td>
+{% endif %}</td>
+    <td>{{ p.created_at }}</td>
+    <td><a href="/m/{{ merchant.uuid }}/{{ p.id }}">{{ p.bitcoin_address }}</a></td>
     <td>{{ p.btc_amount }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
     <td>{{ p.received|btc2currency:"BTC" }}</td>
 </tr>
@@ -53,7 +63,7 @@
 
     <h4>Merchant information</h4>
 
-    <b>Master public key:</b> {{ merchant.master_public_key }}<br/>
+    <b>Master public key:</b> {{ merchant.master_public_key|truncatechars:10 }}<br/>
     <b>Payments URL:</b> {{ merchant.url }}<br/>
 
 </div>

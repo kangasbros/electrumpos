@@ -163,6 +163,8 @@ LOGGING = {
     }
 }
 
+SITE_URL = "http://localhost:8000"
+
 try:
     from local_settings import *
 except ImportError:
