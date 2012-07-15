@@ -55,7 +55,7 @@ class Payment(models.Model):
     def payment_url(self):
         qr = "bitcoin:"+self.bitcoin_address+("", "?amount="+str(self.btc_amount))[self.btc_amount>0]
         if self.merchant.business_name:
-            qr += "&label="+str(self.merchant.business_name)+" #"+str(self.id)
+            qr += "&label="+urllib.quote(str(self.merchant.business_name)+" #"+str(self.id))
         print qr
         print urllib.quote(qr)
         return urllib.quote(qr)
