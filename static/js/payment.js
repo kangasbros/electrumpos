@@ -3,5 +3,15 @@ exit.connect(function () {
   exit.on('blockAdd', function (data) {
     console.log('Block', data);
   });
-  exit.listen(['14HhYVs1hWhHa74wSsiwhzRmiXfTuyzQg5']);
+  exit.on('txNotify', function (data) {
+    console.log('Tx Notify', data);
+  });
+  exit.on('txAdd', function (data) {
+    console.log('Tx Notify', data);
+  });
+
+  var currentAddrs = $.map($('#payments .address'), function (v) {
+    return $(v).text();
+  });
+  exit.listen(currentAddrs);
 });
