@@ -35,7 +35,7 @@
 
 <h2>Old payments</h2>
 
-<table class="table table-striped">
+<table id="payments" class="table table-striped">
 <tr>
     <th>Status</th>
     <th>Date</th>
@@ -45,15 +45,15 @@
 </tr>
 
 {% for p in previous_payments %}
-<tr>
+<tr class="payment">
     <td>{% if p.is_paid %}
     <span class="label label-success">Paid</span>
 {% else %}
     <span class="label label-warning">Unpaid</span>
 {% endif %}</td>
     <td>{{ p.created_at }}</td>
-    <td><a href="/m/{{ merchant.uuid }}/{{ p.id }}">{{ p.bitcoin_address }}</a></td>
-    <td>{{ p.btc_amount }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
+    <td class="address"><a href="/m/{{ merchant.uuid }}/{{ p.id }}">{{ p.bitcoin_address }}</a></td>
+    <td class="amount" data-amount="{{ p.btc_amount }}">{{ p.btc_amount }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
     <td>{{ p.received|btc2currency:"BTC" }}</td>
 </tr>
 {% endfor %}
