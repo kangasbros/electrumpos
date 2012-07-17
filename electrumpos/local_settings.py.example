@@ -20,3 +20,4 @@ password = 'bar'
 import jsonrpclib
 electrum_wallet_server = jsonrpclib.Server('http://%s:%s@%s:%d'%(username, password, ELECTRUM_REMOTE_HOST, ELECTRUM_REMOTE_PORT))
 
+
