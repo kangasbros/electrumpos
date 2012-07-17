@@ -1,0 +1,35 @@
+# install dependencies
+sudo apt-get install python python-dev python-virtualenv
+
+# install electrum
+# -> see http://ecdsa.org/electrum/
+
+# create virtualenv
+mkdir ~/pythonenv
+cd ~/pythonenv
+virtualenv electrumpos
+source ~/pythonenv/electrumpos/bin/activate
+
+# clone electrumpos
+cd /var
+git clone [repo url]
+cd electrumpos
+
+# setup prereqs
+pip install -r electrumpos/requirements.txt
+
+# create mysql database called "electrumpos"
+
+# setup local settings
+cp electrumpos/local_settings.py.example electrumpos/local_settings.py
+# edit local_settings.py, set MySQL settings
+
+# setup wallet server
+cp wallet_server.py <path-to-electrum>/
+python <path-to-electrum>/wallet_server.py
+
+# initialize db
+python manage.py syncdb
+
+# run electrumpos
+python manage.py runserver
