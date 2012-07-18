@@ -32,6 +32,13 @@ class MerchantForm(forms.ModelForm):
         return self.cleaned_data
 
 
+class SettingsForm(forms.ModelForm):
+ 
+    class Meta:
+        model = Merchant
+        fields = ("business_name", "currency",)
+
+
 class PaymentForm(forms.ModelForm):
 
     currency_amount = forms.DecimalField(label="", widget=forms.TextInput(attrs={'class': 'input-small', 'placeholder': _("Amount")}), )

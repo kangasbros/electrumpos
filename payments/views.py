@@ -33,6 +33,9 @@ def home(request):
         if merchant_form.is_valid():
             try:
                 merchant = Merchant.objects.get(master_public_key=merchant_form.cleaned_data["master_public_key"])
+                merchant.currency = merchant_form.cleaned_data["currency"]
+                merchant.business_name = merchant_form.cleaned_data["business_name"]
+                merchant.save()
             except Merchant.DoesNotExist:
                 merchant = merchant_form.save(commit=False)
                 merchant.master_public_key = merchant_form.cleaned_data["master_public_key"]
@@ -50,6 +53,18 @@ def home(request):
         "merchant_form": merchant_form,
         }, context_instance=RequestContext(request))
 
+
+def mpk(request, mpk, currency):
+    try:
+        merchant = Merchant.objects.get(master_public_key=mpk)
+        merchant.currency = currency
+        merchant.save()
+    except Merchant.DoesNotExist:
+        merchant = Merchant.objects.create(uuid=b58encode(os.urandom(16)), 
+            master_public_key=mpk, currency=currency)
+        merchant.save()
+    return HttpResponseRedirect("/m/"+merchant.uuid)
+        
 
 def payment(request, uuid, payment_id=None):
     try:
