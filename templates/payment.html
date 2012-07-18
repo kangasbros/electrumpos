@@ -64,7 +64,7 @@
     <b>Master public key hashed:</b> {{ merchant.master_public_key|hash:"sha256" }}<br/>
     <b>Merchant URL:</b> <a href="{{ merchant.full_url }}">{{ merchant.full_url }}</a><br/>
     <b>Scan the following URL QR code on your mobile device. Bookmark it to accept payments with your phone:</b><br/>
-    <img src="/django_bitcoin/qrcode/{{ merchant.full_url|urlencode:""|urlencode:"" }}"/>
+    <img src="/django_bitcoin/qrcode/{{ merchant.full_url|urlencode:"" }}"/>
 
 </div>
 
