@@ -17,10 +17,16 @@ CURRENCY_CHOICES = [(x, x) for x in big_currency_list()]
 
 
 def bitcoin_address_received(bitcoin_address, confirmations=BITCOIN_CONFIRMATIONS_REQUIRED):
-    url = "http://blockchain.info/q/getreceivedbyaddress/" + bitcoin_address + "?confirmations=" + str(confirmations)
-    f = urllib.urlopen(url, None)
-    data = f.read()
-    r = Decimal(data) * Decimal("0.00000001")
+    try:
+        url = "http://blockchain.info/q/getreceivedbyaddress/" + bitcoin_address + "?confirmations=" + str(confirmations)
+        f = urllib.urlopen(url, None)
+        data = f.read()
+        r = Decimal(data) * Decimal("0.00000001")
+    except InvalidOperation:
+        url = "http://blockexplorer.com/q/getreceivedbyaddress/" + bitcoin_address + "/" + str(confirmations)
+        f = urllib.urlopen(url, None)
+        data = f.read()
+        r = Decimal(data) * Decimal("0.00000001")
     return r
 
 
@@ -44,6 +50,11 @@ class Merchant(models.Model):
 
 
 class Payment(models.Model):
+
+    uuid = models.CharField(max_length=50, default="asd", unique=True)
+    description = models.CharField(max_length=50, default="Some payment")
+    currency = models.CharField(max_length=5, choices=CURRENCY_CHOICES, default='USD')
+
     created_at = models.DateTimeField(default=datetime.datetime.now)
     updated_at = models.DateTimeField(auto_now=True)
     archived_at = models.DateTimeField(null=True, default=None)
@@ -63,6 +74,9 @@ class Payment(models.Model):
         if self.merchant.business_name:
             qr += "&label="+urllib.quote(str(self.merchant.business_name)+" #"+str(self.id))
         return urllib.quote(qr)
+
+    def public_url(self):
+        return "/public/"+self.uuid
 
     def exchange_rate(self):
         return Decimal(self.currency_amount / self.btc_amount).quantize(Decimal("0.01"))
@@ -91,6 +105,10 @@ class Payment(models.Model):
         if self.received() >= self.btc_amount:
             return True
         return False
+
+    def archive(self):
+        self.archived_at = datetime.datetime.now()
+        self.save()
 
     def is_confirmed(self):
         if self.received_least_confirmed >= self.btc_amount:

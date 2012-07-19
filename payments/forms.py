@@ -45,8 +45,10 @@ class PaymentForm(forms.ModelForm):
     
     class Meta:
         model = Payment
-        fields = ("currency_amount",)
+        fields = ("currency_amount", "currency",)
+        widgets = {
+            'currency': forms.Select(attrs={'class': 'span1', }),
+        }
 
     def clean(self):
-
         return self.cleaned_data

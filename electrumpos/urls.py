@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'^m/(?P<uuid>.*?)/(?P<payment_id>[\d]+)$', 'payments.views.payment', name='payment_id'),
     url(r'^m/(?P<uuid>.*?)$', 'payments.views.payment', name='payment'),
 
+    url(r'^public/(?P<payment_uuid>.*?)$', 'payments.views.public', name='public'),
+
     url(r'^django_bitcoin/', include('django_bitcoin.urls')),
 
     # url(r'^electrumpos/', include('electrumpos.foo.urls')),

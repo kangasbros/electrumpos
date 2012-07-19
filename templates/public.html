@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load currency_conversions %}
+{% load bootstrap_toolkit %}
+{% load hash_filter %}
+{% block content %}
+
+<div style="position:fixed; top:5px; right:5px;">{% now "b d H:i" %}</div>
+<h1>{% if merchant.business_name %}{{ merchant.business_name }}{% else %}{{ merchant.business_name }}{% endif %}</h1>
+
+    <h2>Payment #{{payment.id}} to {% if merchant.business_name %}{{ merchant.business_name }}{% else %}{{ merchant.business_name }}{% endif %}</h2>
+<center>
+<div class="well" style="background-color: {% if payment.is_confirmed %}#468847{% elif payment.is_paid %}#3A87AD{% endif %}">
+    <div>{{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount|btc2currency:"BTC" }} BTC</div>
+    <div>Exchange rate: {{ payment.exchange_rate }} (24h avg)</div>
+    <div class="address">{{ payment.bitcoin_address }}</div>
+    <img src="/django_bitcoin/qrcode/{{ payment.payment_url }}"/>
+</div>
+</center>
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="/static/js/socket.io.min.js"></script>
+    <script src="/static/js/bitcoinjs-exit.js"></script>
+    <script src="/static/js/payment.js"></script>
+{% endblock scripts %}
