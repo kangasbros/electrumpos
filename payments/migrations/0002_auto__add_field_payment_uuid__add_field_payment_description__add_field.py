@@ -12,7 +12,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Payment.uuid'
         db.add_column('payments_payment', 'uuid',
-                      self.gf('django.db.models.fields.CharField')(default='asd', unique=True, max_length=50),
+                      self.gf('django.db.models.fields.CharField')(default='asd', max_length=50),
                       keep_default=False)
 
         # Adding field 'Payment.description'
