@@ -98,7 +98,8 @@ def get_wallet_or_create(mpk):
 def new_wallet(mpk):
     try:
         w = get_wallet_or_create(mpk)
-    except Exception:
+    except Exception as e:
+        print e
         return 0
     return 1
 
