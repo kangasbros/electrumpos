@@ -1,6 +1,6 @@
 from django.db import models
 from django_bitcoin.currency import *
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 import datetime
 import urllib
 
