@@ -25,8 +25,8 @@ class Migration(SchemaMigration):
                       self.gf('django.db.models.fields.CharField')(default='USD', max_length=5),
                       keep_default=False)
 
-        for p in Payment.objects.all():
-            p.uuid = b58encode(os.urandom(16))
+        # for p in Payment.objects.all():
+        #     p.uuid = b58encode(os.urandom(16))
 
 
     def backwards(self, orm):
