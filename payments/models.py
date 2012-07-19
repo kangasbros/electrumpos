@@ -23,7 +23,7 @@ def bitcoin_address_received(bitcoin_address, confirmations=BITCOIN_CONFIRMATION
         data = f.read()
         r = Decimal(data) * Decimal("0.00000001")
     except InvalidOperation:
-        url = "http://blockexplorer.com/q/getreceivedbyaddress/" + bitcoin_address + "/" + str(confirmations)
+        url = "http://blockexplorer.com/q/getreceivedbyaddress/" + bitcoin_address + ("", "/" + str(confirmations))[confirmations>0]
         f = urllib.urlopen(url, None)
         data = f.read()
         r = Decimal(data) * Decimal("0.00000001")
