@@ -114,4 +114,52 @@ def payment(request, uuid, payment_id=None):
         "previous_payments": previous_payments,
         }, context_instance=RequestContext(request))
 
+def public(request, payment_uuid):
+    try:
+        merchant = Merchant.objects.get(uuid=uuid)
+    except Merchant.DoesNotExist:
+        messages.add_message(request, messages.ERROR, \
+                        _("Invalid secret URL."))
+        return HttpResponseRedirect("/")
+
+    payment = None
+    fresh_payment = False
+
+    if request.method == "POST":
+        payment_form = PaymentForm(request.POST)
+        if payment_form.is_valid():
+            payment = payment_form.save(commit=False)
+            while True:
+                payment.bitcoin_address = electrum_wallet_server.getnewaddress(merchant.master_public_key)
+                if bitcoin_address_received(payment.bitcoin_address, 0) == Decimal(0):
+                    break
+            if not payment.bitcoin_address:
+                raise Exception("Couldn't fetch new address. Contact the site operators.")
+            payment.merchant = merchant
+            payment.btc_amount = currency2btc(payment.currency_amount, merchant.currency).quantize(BITCOIN_CONVERSION_PRECISION)
+            payment.save()
+            fresh_payment = True
+            return HttpResponseRedirect(payment.url())
+        else:
+            messages.add_message(request, messages.ERROR, \
+                        _("Error in form."))
+    else:
+        payment_form = PaymentForm()
+    
+    if payment_id:
+        try:
+            payment = Payment.objects.get(id=payment_id, merchant=merchant)
+        except Payment.DoesNotExist:
+            pass
+
+    previous_payments = Payment.objects.filter(merchant=merchant, archived_at=None).order_by("-created_at")
+
+    return render_to_response("payment.html", {
+        "merchant": merchant,
+        "payment_form": payment_form,
+        "payment": payment,
+        "fresh_payment": fresh_payment,
+        "previous_payments": previous_payments,
+        }, context_instance=RequestContext(request))
+
 

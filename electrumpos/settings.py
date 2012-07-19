@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'django_extensions',
     'django_bitcoin',
+    'south',
     'bootstrap_toolkit',
     'django_hash_filter',
     'payments',
