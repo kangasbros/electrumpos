@@ -39,6 +39,9 @@ class Merchant(models.Model):
     def full_url(self):
         return SITE_URL+self.url()
 
+    def full_url_quoted(self):
+        return  urllib.quote(SITE_URL+self.url())
+
 
 class Payment(models.Model):
     created_at = models.DateTimeField(default=datetime.datetime.now)
@@ -59,8 +62,6 @@ class Payment(models.Model):
         qr = "bitcoin:"+self.bitcoin_address+("", "?amount="+str(self.btc_amount))[self.btc_amount>0]
         if self.merchant.business_name:
             qr += "&label="+urllib.quote(str(self.merchant.business_name)+" #"+str(self.id))
-        print qr
-        print urllib.quote(qr)
         return urllib.quote(qr)
 
     def exchange_rate(self):
@@ -79,8 +80,8 @@ class Payment(models.Model):
 
     def received_confirmed(self):
         r = bitcoin_address_received(self.bitcoin_address, confirmations=BITCOIN_CONFIRMATIONS_REQUIRED)
-        if r > self.received_least:
-            self.received_least = r
+        if r > self.received_least_confirmed:
+            self.received_least_confirmed = r
             self.save()
         return r
 
