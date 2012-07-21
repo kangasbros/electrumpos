@@ -91,7 +91,9 @@ def payment(request, uuid, payment_id=None):
             if not payment.bitcoin_address:
                 raise Exception("Couldn't fetch new address. Contact the site operators.")
             payment.merchant = merchant
-            payment.btc_amount = currency2btc(payment.currency_amount, merchant.currency).quantize(BITCOIN_CONVERSION_PRECISION)
+            payment.btc_amount = payment.currency_amount
+            if payment.currency != "BTC":
+                payment.btc_amount = currency2btc(payment.currency_amount, payment.currency).quantize(BITCOIN_CONVERSION_PRECISION)
             payment.save()
             fresh_payment = True
             return HttpResponseRedirect(payment.url())
