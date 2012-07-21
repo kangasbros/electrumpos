@@ -8,9 +8,9 @@
 <div style="position:fixed; top:5px; right:5px;">{% now "b d H:i" %}</div>
 <h1>{% if merchant.business_name %}{{ merchant.business_name }}{% else %}{{ merchant.business_name }}{% endif %}</h1>
 
-    <h2>Payment #{{payment.id}} to {% if merchant.business_name %}{{ merchant.business_name }}{% else %}{{ merchant.business_name }} {% endif %} {% if p.is_confirmed %}
+    <h2>Payment #{{payment.id}} to {% if merchant.business_name %}{{ merchant.business_name }}{% else %}{{ merchant.business_name }} {% endif %} {% if payment.is_confirmed %}
     <span class="label label-success">Confirmed</span>
-{% elif p.is_paid %}
+{% elif payment.is_paid %}
     <span class="label label-info">Paid</span>
 {% else %}
     <span class="label label-warning">Unpaid</span>

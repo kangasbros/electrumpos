@@ -11,9 +11,9 @@
 
 
 {% if payment %}
-    <h2>Payment #{{payment.id}} {% if p.is_confirmed %}
+    <h2>Payment #{{payment.id}} {% if payment.is_confirmed %}
     <span class="label label-success">Confirmed</span>
-{% elif p.is_paid %}
+{% elif payment.is_paid %}
     <span class="label label-info">Paid</span>
 {% else %}
     <span class="label label-warning">Unpaid</span>
