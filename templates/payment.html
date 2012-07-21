@@ -11,7 +11,13 @@
 
 
 {% if payment %}
-    <h2>Payment #{{payment.id}}</h2>
+    <h2>Payment #{{payment.id}} {% if p.is_confirmed %}
+    <span class="label label-success">Confirmed</span>
+{% elif p.is_paid %}
+    <span class="label label-info">Paid</span>
+{% else %}
+    <span class="label label-warning">Unpaid</span>
+{% endif %}</td></h2>
 <center>
 <div class="well" style="background-color: {% if payment.is_confirmed %}#468847{% elif payment.is_paid %}#3A87AD{% endif %}">
     <div>{{ payment.currency_amount }} {{ merchant.currency }} = {{ payment.btc_amount|btc2currency:"BTC" }} BTC</div>
