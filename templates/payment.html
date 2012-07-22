@@ -59,7 +59,7 @@
 {% endif %}</td>
     <td>{{ p.created_at }}</td>
     <td class="address"><a href="/m/{{ merchant.uuid }}/{{ p.id }}">{{ p.bitcoin_address }}</a></td>
-    <td class="amount" data-amount="{{ p.btc_amount|btc2currency:"BTC" }}">{{ p.btc_amount }} BTC ({{ p.currency_amount }} {{ merchant.currency }})</td>
+    <td class="amount" data-amount="{{ p.btc_amount|btc2currency:"BTC" }}">{{ p.btc_amount }} BTC ({{ p.currency_amount }} {{ payment.currency }})</td>
     <td class="received" data-received="{{ p.received|btc2currency:"BTC" }}" data-received-confirmed="{{ p.received_confirmed|btc2currency:"BTC" }}">{{ p.received|btc2currency:"BTC" }}</td>
     <td><a href="{{ p.public_url }}">public</a></td>
 </tr>
