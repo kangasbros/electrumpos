@@ -25,6 +25,9 @@ class MerchantForm(forms.ModelForm):
 
     def clean(self):
 
+        if "master_public_key" not in self.cleaned_data:
+            raise ValidationError(_("Please specify a valid master public key."))
+
         success = electrum_wallet_server.new_wallet(self.cleaned_data["master_public_key"])
         if not success:
             raise ValidationError(_("Invalid public key."))
