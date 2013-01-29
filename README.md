@@ -8,4 +8,4 @@ and accept payments that cannot be spent by the same systems accepting
 the payments.
 
 AcceptBit also uses BitcoinJS technology to keep the payments status
-updated in real-time so you can you can move on to the next customer.
+updated in real-time so you can move on to the next customer.
